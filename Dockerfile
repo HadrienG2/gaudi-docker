@@ -14,7 +14,7 @@ RUN zypper ref && zypper dup -y
 RUN zypper in -y doxygen graphviz cppunit-devel gdb unzip libxerces-c-devel    \
                  uuid-devel libunwind-devel gperftools gperftools-devel        \
                  jemalloc-devel ncurses5-devel ninja wget python2-nose         \
-                 python2-networkx
+                 python2-networkx which curl
 
 # === INSTALL (OLDER) BOOST ===
 
@@ -25,7 +25,8 @@ RUN git clone --recursive -j8 --branch=boost-1.66.0 --depth=1                  \
 # Build and install Boost (yes, stupid b2 can't even copy headers properly...)
 RUN cd boost                                                                   \
     && ./bootstrap.sh --with-python=python2.7                                  \
-    && ./b2 install -j8 --build-dir=build variant=release link=shared          \
+    && ./b2 stage -j8 --build-dir=build variant=release link=shared            \
+    && ./b2 install --build-dir=build variant=release link=shared              \
     && cp libs/program_options/include/boost/program_options.hpp               \
           /usr/local/include/boost/
 
