@@ -32,7 +32,9 @@ RUN cd boost                                                                   \
     && cp libs/utility/include/boost/utility/string_ref.hpp                    \
           /usr/local/include/boost/utility                                     \
     && cp libs/circular_buffer/include/boost/circular_buffer.hpp               \
-          /usr/local/include/boost
+          /usr/local/include/boost                                             \
+    && cp libs/circular_buffer/include/boost/circular_buffer_fwd.hpp           \
+          /usr/local/include/boost                                             \
 
 # Get rid of the Boost build directory
 RUN rm -rf boost
