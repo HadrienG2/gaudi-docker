@@ -14,7 +14,7 @@ RUN zypper ref && zypper dup -y
 RUN zypper in -y doxygen graphviz cppunit-devel gdb unzip libxerces-c-devel    \
                  uuid-devel libunwind-devel gperftools gperftools-devel        \
                  jemalloc-devel ncurses5-devel ninja wget python2-nose         \
-                 python2-networkx which curl
+                 python2-networkx which curl libuuid-devel
 
 # === INSTALL (OLDER) BOOST ===
 
@@ -28,7 +28,9 @@ RUN cd boost                                                                   \
     && ./b2 stage -j8 --build-dir=build variant=release link=shared            \
     && ./b2 install --build-dir=build variant=release link=shared              \
     && cp libs/program_options/include/boost/program_options.hpp               \
-          /usr/local/include/boost/
+          /usr/local/include/boost/                                            \
+    && cp libs/utility/include/boost/utility/string_ref.hpp                    \
+          /usr/local/include/boost/utility
 
 # Get rid of the Boost build directory
 RUN rm -rf boost
