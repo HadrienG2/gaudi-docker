@@ -30,7 +30,9 @@ RUN cd boost                                                                   \
 
 # Work around Boost's brain damaged build system
 RUN cp -rf boost/libs/program_options/include/boost/*                          \
-           /usr/local/include/boost/
+           /usr/local/include/boost/                                           \
+    && cp -rf boost/libs/utility/include/boost/*                               \
+              /usr/local/include/boost/
 
 # Get rid of the Boost build directory
 RUN rm -rf boost
