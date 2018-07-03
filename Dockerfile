@@ -26,7 +26,7 @@ RUN git clone --recursive -j8 --branch=boost-1.66.0 --depth=1                  \
 RUN cd boost                                                                   \
     && ./bootstrap.sh --with-python=python2.7                                  \
     && ./b2 -j8                                                                \
-    && ./b2 install -j8
+    && ./b2 install
 
 # Get rid of the Boost build directory
 RUN rm -rf boost
