@@ -25,14 +25,7 @@ RUN git clone --recursive -j8 --branch=boost-1.66.0 --depth=1                  \
 # Build and install Boost (yes, stupid b2 can't even copy headers properly...)
 RUN cd boost                                                                   \
     && ./bootstrap.sh --with-python=python2.7                                  \
-    && ./b2 stage -j8 --build-dir=build variant=release link=shared            \
-    && ./b2 install --build-dir=build variant=release link=shared              \
-    && cp libs/program_options/include/boost/program_options.hpp               \
-          /usr/local/include/boost/                                            \
-    && cp libs/utility/include/boost/utility/string_ref.hpp                    \
-          /usr/local/include/boost/utility                                     \
-    && cp -rf libs/circular_buffer/include/boost/*                             \
-              /usr/local/include/boost
+    && ./b2 install -j8 variant=release link=shared
 
 # Get rid of the Boost build directory
 RUN rm -rf boost
