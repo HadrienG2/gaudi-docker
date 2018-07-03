@@ -22,10 +22,10 @@ RUN zypper in -y doxygen graphviz cppunit-devel gdb unzip libxerces-c-devel    \
 RUN git clone --recursive -j8 --branch=boost-1.66.0 --depth=1                  \
     https://github.com/boostorg/boost.git
 
-# Build and install Boost (yes, stupid b2 can't even copy headers properly...)
+# Build and install Boost
 RUN cd boost                                                                   \
     && ./bootstrap.sh --with-python=python2.7                                  \
-    && ./b2 install -j8 variant=release link=shared
+    && ./b2 install -j8
 
 # Get rid of the Boost build directory
 RUN rm -rf boost
