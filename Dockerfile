@@ -36,6 +36,8 @@ RUN cp -rf boost/libs/program_options/include/boost/*                          \
     && cp -rf boost/libs/circular_buffer/include/boost/*                       \
               /usr/local/include/boost/                                        \
     && cp -rf boost/libs/ptr_container/include/boost/*                         \
+              /usr/local/include/boost/                                        \
+    && cp -rf boost/libs/assign/include/boost/*                                \
               /usr/local/include/boost/
 
 # NOTE: Disabled due to Boost fuckery
