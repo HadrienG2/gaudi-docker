@@ -40,11 +40,8 @@ RUN cp -rf boost/libs/program_options/include/boost/*                          \
     && cp -rf boost/libs/assign/include/boost/*                                \
               /usr/local/include/boost/
 
-# NOTE: Disabled due to Boost fuckery
-# TODO: Bring this back after Boost fuckup has been isolated
-#
-# # Get rid of the Boost build directory
-# RUN rm -rf boost
+# Get rid of the Boost build directory
+RUN rm -rf boost
 
 
 # === INSTALL C++ GUIDELINE SUPPORT LIBRARY ===
