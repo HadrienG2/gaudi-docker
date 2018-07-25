@@ -1,20 +1,20 @@
 # === DOCKER-SPECIFIC HACKERY ===
 
-FROM hgrasland/root-tests
+FROM hgrasland/root-tests:latest-cxx17
 LABEL Description="openSUSE Tumbleweed environment for Gaudi" Version="0.1"
 CMD bash
 
 
+# TODO: Port the rest to Spack
+
 # === SYSTEM SETUP ===
 
-# Update the host system
-RUN zypper ref && zypper dup -y
-
 # Install non-ROOT requirements
-RUN zypper in -y doxygen graphviz cppunit-devel gdb unzip libxerces-c-devel    \
-                 uuid-devel libunwind-devel gperftools gperftools-devel        \
-                 jemalloc-devel ncurses5-devel ninja wget python2-nose         \
-                 python2-networkx which curl libuuid-devel
+RUN zypper in -y cmake doxygen graphviz cppunit-devel gdb unzip                \
+                 libxerces-c-devel uuid-devel libunwind-devel gperftools       \
+                 gperftools-devel jemalloc-devel ncurses5-devel ninja wget     \
+                 python2-nose python2-networkx which curl libuuid-devel ninja  \
+                 python2-devel
 
 # === INSTALL (OLDER) BOOST ===
 
