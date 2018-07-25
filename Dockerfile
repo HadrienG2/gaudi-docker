@@ -52,7 +52,7 @@ RUN git clone --depth=1 https://github.com/Microsoft/GSL.git
 # Build the GSL
 RUN cd GSL && mkdir build && cd build                                          \
     && cmake -GNinja -DCMAKE_BUILD_TYPE=RelWithDebInfo                         \
-             -DGSL_CXX_STANDARD=14 ..                                          \
+             -DGSL_CXX_STANDARD=17 ..                                          \
     && ninja
 
 # Check that the GSL build is working properly
@@ -73,7 +73,7 @@ RUN git clone --branch=0.3.6 --depth=1                                         \
 
 # Build range-v3
 RUN cd range-v3 && mkdir build && cd build                                     \
-    && cmake -GNinja -DRANGES_CXX_STD=14 .. && ninja
+    && cmake -GNinja -DRANGES_CXX_STD=17 .. && ninja
 
 # Check that the range-v3 build is working properly
 RUN cd range-v3/build && ctest -j8
@@ -183,7 +183,7 @@ RUN curl http://lcgpackages.web.cern.ch/lcgpackages/tarFiles/sources/RELAX-root6
 # Build and install RELAX (wow, such legacy, much hacks!)
 RUN cd RELAX && mkdir build && cd build                                        \
     && ln -s `which genreflex` /genreflex                                      \
-    && export CXXFLAGS="-I/usr/local/include/root/"                            \
+    && export CXXFLAGS="-I/usr/local/include/root/ -std=c++17"                 \
     && cmake .. -DCMAKE_BUILD_TYPE=RelWithDebInfo                              \
     && make -j8 && make install                                                \
     && rm /genreflex && unset CXXFLAGS
