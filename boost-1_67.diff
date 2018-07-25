@@ -1,0 +1,52 @@
+diff --git a/Gaudi/GaudiCoreSvc/CMakeLists.txt b/Gaudi/GaudiCoreSvc/CMakeLists.txt
+index 245da2c6..598295ff 100644
+--- a/Gaudi/GaudiCoreSvc/CMakeLists.txt
++++ b/Gaudi/GaudiCoreSvc/CMakeLists.txt
+@@ -2,7 +2,7 @@ gaudi_subdir(GaudiCoreSvc)
+ 
+ gaudi_depends_on_subdirs(GaudiKernel)
+ 
+-find_package(Boost COMPONENTS system filesystem regex thread python)
++find_package(Boost COMPONENTS system filesystem regex thread python27)
+ find_package(TBB)
+ find_package(PythonLibs)
+ find_package(ROOT)
+diff --git a/Gaudi/GaudiExamples/CMakeLists.txt b/Gaudi/GaudiExamples/CMakeLists.txt
+index 94337f7d..3ca44011 100644
+--- a/Gaudi/GaudiExamples/CMakeLists.txt
++++ b/Gaudi/GaudiExamples/CMakeLists.txt
+@@ -5,7 +5,7 @@ gaudi_depends_on_subdirs(GaudiKernel GaudiUtils GaudiGSL GaudiAlg RootCnv)
+ find_package(AIDA)
+ find_package(HepPDT)
+ find_package(ROOT COMPONENTS Tree RIO Hist Net REQUIRED)
+-find_package(Boost COMPONENTS python REQUIRED)
++find_package(Boost COMPONENTS python27 REQUIRED)
+ find_package(CLHEP)
+ find_package(GSL)
+ find_package(PythonLibs)
+diff --git a/Gaudi/GaudiProfiling/CMakeLists.txt b/Gaudi/GaudiProfiling/CMakeLists.txt
+index 8ddfa5b3..daea462b 100644
+--- a/Gaudi/GaudiProfiling/CMakeLists.txt
++++ b/Gaudi/GaudiProfiling/CMakeLists.txt
+@@ -4,7 +4,7 @@ gaudi_depends_on_subdirs(GaudiKernel GaudiAlg)
+ 
+ if (CMAKE_SYSTEM_NAME MATCHES Linux)
+ 
+-find_package(Boost COMPONENTS python)
++find_package(Boost COMPONENTS python27)
+ find_package(PythonLibs)
+ find_package(unwind)
+ find_package(gperftools)
+diff --git a/Gaudi/GaudiUtils/src/component/StalledEventMonitor.cpp b/Gaudi/GaudiUtils/src/component/StalledEventMonitor.cpp
+index d0ed9c20..e4bcceda 100644
+--- a/Gaudi/GaudiUtils/src/component/StalledEventMonitor.cpp
++++ b/Gaudi/GaudiUtils/src/component/StalledEventMonitor.cpp
+@@ -89,7 +89,7 @@ StatusCode StalledEventMonitor::initialize()
+   if ( m_eventTimeout ) {
+     // create the watchdog thread
+     m_watchdog = std::make_unique<EventWatchdog>(
+-        msgSvc(), "EventWatchdog", boost::posix_time::seconds( m_eventTimeout ), m_stackTrace, m_maxTimeoutCount );
++        msgSvc(), "EventWatchdog", boost::posix_time::seconds( m_eventTimeout.value() ), m_stackTrace, m_maxTimeoutCount );
+ 
+     // register to the incident service
+     static const std::string serviceName = "IncidentSvc";

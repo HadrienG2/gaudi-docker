@@ -14,12 +14,15 @@ RUN zypper in -y cmake doxygen graphviz cppunit-devel gdb unzip                \
                  libxerces-c-devel uuid-devel libunwind-devel gperftools       \
                  gperftools-devel jemalloc-devel ncurses5-devel ninja wget     \
                  python2-nose python2-networkx which curl libuuid-devel ninja  \
-                 python2-devel
+                 python2-devel gsl-devel tbb-devel zlib-devel libpng-devel
 
-# === INSTALL (OLDER) BOOST ===
+# === INSTALL BOOST ===
 
-# Download Boost v1.66 (Gaudi does not support v1.67+ yet)
-RUN git clone --recursive -j8 --branch=boost-1.66.0 --depth=1                  \
+# FIXME: We need to install Boost ourselves because OpenSUSE does not use the
+#        standard naming for boost_python libraries...
+
+# Download Boost v1.67
+RUN git clone --recursive -j8 --branch=boost-1.67.0 --depth=1                  \
     https://github.com/boostorg/boost.git
 
 # Build and install Boost
@@ -196,6 +199,10 @@ RUN rm -rf RELAX
 
 # Clone the Gaudi repository
 RUN git clone --origin upstream https://gitlab.cern.ch/gaudi/Gaudi/
+
+# Patch Gaudi for Boost 1.67 support
+COPY boost-1_67.diff /root/
+RUN patch -p1 <boost-1_67.diff && rm boost-1_67.diff
 
 # Configure Gaudi
 RUN cd Gaudi && mkdir build && cd build                                        \
