@@ -198,7 +198,7 @@ RUN rm -rf RELAX
 # === ATTEMPT A GAUDI TEST BUILD ===
 
 # Clone the Gaudi repository
-RUN git clone --origin upstream https://gitlab.cern.ch/gaudi/Gaudi/
+RUN git clone --origin upstream https://gitlab.cern.ch/gaudi/Gaudi.git
 
 # Patch Gaudi for Boost 1.67 support
 COPY boost-1_67.diff /root/
