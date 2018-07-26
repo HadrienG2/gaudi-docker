@@ -9,12 +9,16 @@ CMD bash
 
 # === SYSTEM SETUP ===
 
+# Use python packages from spack
+RUN spack install python py-nose py-networkx                                   \
+    && echo "spack load python py-nose py-networkx" >> "$SETUP_ENV"
+
 # Install non-ROOT requirements
 RUN zypper in -y cmake doxygen graphviz cppunit-devel gdb unzip                \
                  libxerces-c-devel uuid-devel libunwind-devel gperftools       \
                  gperftools-devel jemalloc-devel ncurses5-devel ninja wget     \
-                 python2-nose python2-networkx which curl libuuid-devel ninja  \
-                 python2-devel gsl-devel tbb-devel zlib-devel libpng-devel
+                 which curl libuuid-devel ninja  gsl-devel tbb-devel           \
+                 zlib-devel libpng-devel
 
 # === INSTALL BOOST ===
 
