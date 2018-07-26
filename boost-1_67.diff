@@ -1,5 +1,5 @@
 diff --git a/Gaudi/GaudiCoreSvc/CMakeLists.txt b/Gaudi/GaudiCoreSvc/CMakeLists.txt
-index 245da2c6..598295ff 100644
+index 245da2c6..2b036f60 100644
 --- a/Gaudi/GaudiCoreSvc/CMakeLists.txt
 +++ b/Gaudi/GaudiCoreSvc/CMakeLists.txt
 @@ -2,7 +2,7 @@ gaudi_subdir(GaudiCoreSvc)
@@ -7,12 +7,12 @@ index 245da2c6..598295ff 100644
  gaudi_depends_on_subdirs(GaudiKernel)
  
 -find_package(Boost COMPONENTS system filesystem regex thread python)
-+find_package(Boost COMPONENTS system filesystem regex thread python27)
++find_package(Boost COMPONENTS system filesystem regex thread python27 REQUIRED)
  find_package(TBB)
  find_package(PythonLibs)
  find_package(ROOT)
 diff --git a/Gaudi/GaudiExamples/CMakeLists.txt b/Gaudi/GaudiExamples/CMakeLists.txt
-index 94337f7d..3ca44011 100644
+index 94337f7d..232979d3 100644
 --- a/Gaudi/GaudiExamples/CMakeLists.txt
 +++ b/Gaudi/GaudiExamples/CMakeLists.txt
 @@ -5,7 +5,7 @@ gaudi_depends_on_subdirs(GaudiKernel GaudiUtils GaudiGSL GaudiAlg RootCnv)
@@ -24,8 +24,20 @@ index 94337f7d..3ca44011 100644
  find_package(CLHEP)
  find_package(GSL)
  find_package(PythonLibs)
+@@ -145,9 +145,9 @@ if(NOT StatusCodeHeaderData_previous STREQUAL StatusCodeHeaderData)
+   file(WRITE "${CMAKE_CURRENT_BINARY_DIR}/HackedStatusCode.h" "${StatusCodeHeaderData}")
+ endif()
+ 
+-if(Boost_PYTHON_FOUND)
++if(Boost_PYTHON27_FOUND)
+   gaudi_add_python_module(PyExample src/PythonModule/*.cpp
+-                          LINK_LIBRARIES ${Boost_PYTHON_LIBRARY}
++                          LINK_LIBRARIES ${Boost_PYTHON27_LIBRARY}
+                           INCLUDE_DIRS Boost PythonLibs)
+ endif()
+ 
 diff --git a/Gaudi/GaudiProfiling/CMakeLists.txt b/Gaudi/GaudiProfiling/CMakeLists.txt
-index 8ddfa5b3..daea462b 100644
+index 8ddfa5b3..83d21f7b 100644
 --- a/Gaudi/GaudiProfiling/CMakeLists.txt
 +++ b/Gaudi/GaudiProfiling/CMakeLists.txt
 @@ -4,7 +4,7 @@ gaudi_depends_on_subdirs(GaudiKernel GaudiAlg)
@@ -33,10 +45,21 @@ index 8ddfa5b3..daea462b 100644
  if (CMAKE_SYSTEM_NAME MATCHES Linux)
  
 -find_package(Boost COMPONENTS python)
-+find_package(Boost COMPONENTS python27)
++find_package(Boost COMPONENTS python27 REQUIRED)
  find_package(PythonLibs)
  find_package(unwind)
  find_package(gperftools)
+@@ -29,8 +29,8 @@ if(UNWIND_FOUND AND CMAKE_SYSTEM_PROCESSOR STREQUAL "x86_64")
+                    INCLUDE_DIRS unwind ZLIB)
+ 
+   gaudi_add_python_module(PyCPUFamily src/python/CPUFamily.cpp
+-                          LINK_LIBRARIES ${Boost_PYTHON_LIBRARY}
+-                          INCLUDE_DIRS PythonLibs)
++                          LINK_LIBRARIES ${Boost_PYTHON27_LIBRARY}
++                          INCLUDE_DIRS Boost PythonLibs)
+ 
+   gaudi_add_executable(GaudiGenProfilingHtml src/app/pfm_gen_analysis.cpp
+                        LINK_LIBRARIES GaudiKernel ZLIB
 diff --git a/Gaudi/GaudiUtils/src/component/StalledEventMonitor.cpp b/Gaudi/GaudiUtils/src/component/StalledEventMonitor.cpp
 index d0ed9c20..e4bcceda 100644
 --- a/Gaudi/GaudiUtils/src/component/StalledEventMonitor.cpp
