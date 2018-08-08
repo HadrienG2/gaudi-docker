@@ -16,7 +16,7 @@ CMD bash
 # TODO: As soon as spack provides a less verbose and more performant environment
 #       setup mechanism, switch to it.
 #
-RUN spack install boost@1.67+python cmake intel-tbb ninja python py-nose       \
+RUN spack install boost@1.67.0+python cmake intel-tbb ninja python py-nose     \
                   py-networkx py-setuptools                                    \
     && echo "spack load boost" >> "$SETUP_ENV"                                 \
     && echo "spack load cmake" >> "$SETUP_ENV"                                 \
