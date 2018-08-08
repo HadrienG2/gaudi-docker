@@ -210,6 +210,14 @@ RUN git clone --origin upstream https://gitlab.cern.ch/gaudi/Gaudi.git
 COPY boost-1_67.diff /root/
 RUN patch -p1 <boost-1_67.diff && rm boost-1_67.diff
 
+# Patch Gaudi to append the jemalloc path, rather than prepending it, as
+# otherwise we accidentally prioritize the system python over the Spack one.
+#
+# FIXME: Use Spack's jemalloc to work around this problem.
+#
+COPY append_jemalloc.diff /root/
+RUN patch -p1 <append_jemalloc.diff && rm append_jemalloc.diff
+
 # Configure Gaudi
 RUN cd Gaudi && mkdir build && cd build                                        \
     && cmake -DGAUDI_DIAGNOSTICS_COLOR=ON -GNinja ..

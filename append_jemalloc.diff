@@ -1,0 +1,13 @@
+diff --git a/Gaudi/GaudiProfiling/CMakeLists.txt b/Gaudi/GaudiProfiling/CMakeLists.txt
+index 8ddfa5b3..59f5b7cb 100644
+--- a/Gaudi/GaudiProfiling/CMakeLists.txt
++++ b/Gaudi/GaudiProfiling/CMakeLists.txt
+@@ -116,7 +116,7 @@ if(jemalloc_lib)
+                  COMMAND gaudirun.py
+                  ENVIRONMENT LD_PRELOAD=${jemalloc_lib})
+   get_filename_component(jemalloc_libdir "${jemalloc_lib}" PATH)
+-  gaudi_env(PREPEND LD_LIBRARY_PATH "${jemalloc_libdir}")
++  gaudi_env(APPEND LD_LIBRARY_PATH "${jemalloc_libdir}")
+ else()
+   message(STATUS "jemalloc not found, cannot test GAUDI-1045")
+ endif()
