@@ -22,7 +22,10 @@ RUN spack install python py-nose py-networkx py-setuptools                     \
     && echo "spack load py-networkx" >> "$SETUP_ENV"                           \
     && echo "spack load py-setuptools" >> "$SETUP_ENV"
 
-# Install non-ROOT requirements
+# Install non-ROOT requirements from the system package manager
+#
+# FIXME: Move to Spack when feasible, otherwise add package to spack image
+#
 RUN zypper in -y cmake doxygen graphviz cppunit-devel gdb libxerces-c-devel    \
                  uuid-devel libunwind-devel gperftools gperftools-devel        \
                  jemalloc-devel ncurses5-devel ninja wget which libuuid-devel  \
