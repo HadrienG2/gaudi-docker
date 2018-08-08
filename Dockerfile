@@ -16,8 +16,9 @@ CMD bash
 # TODO: As soon as spack provides a less verbose and more performant environment
 #       setup mechanism, switch to it.
 #
-RUN spack install cmake intel-tbb ninja python py-nose py-networkx             \
-                  py-setuptools                                                \
+RUN spack install boost@1.67+python cmake intel-tbb ninja python py-nose       \
+                  py-networkx py-setuptools                                    \
+    && echo "spack load boost" >> "$SETUP_ENV"                                 \
     && echo "spack load cmake" >> "$SETUP_ENV"                                 \
     && echo "spack load intel-tbb" >> "$SETUP_ENV"                             \
     && echo "spack load ninja" >> "$SETUP_ENV"                                 \
@@ -39,37 +40,6 @@ RUN zypper in -y doxygen graphviz cppunit-devel gdb libxerces-c-devel          \
 
 
 # TODO: Port the rest to Spack
-
-# === INSTALL BOOST ===
-
-# FIXME: We need to install Boost ourselves because OpenSUSE does not use the
-#        standard naming for boost_python libraries...
-
-# Download Boost v1.67
-RUN git clone --recursive -j8 --branch=boost-1.67.0 --depth=1                  \
-    https://github.com/boostorg/boost.git
-
-# Build and install Boost
-RUN cd boost                                                                   \
-    && ./bootstrap.sh --with-python=python2.7                                  \
-    && ./b2 -j8                                                                \
-    && ./b2 install
-
-# Work around Boost's brain damaged build system
-RUN cp -rf boost/libs/program_options/include/boost/*                          \
-           /usr/local/include/boost/                                           \
-    && cp -rf boost/libs/utility/include/boost/*                               \
-              /usr/local/include/boost/                                        \
-    && cp -rf boost/libs/circular_buffer/include/boost/*                       \
-              /usr/local/include/boost/                                        \
-    && cp -rf boost/libs/ptr_container/include/boost/*                         \
-              /usr/local/include/boost/                                        \
-    && cp -rf boost/libs/assign/include/boost/*                                \
-              /usr/local/include/boost/
-
-# Get rid of the Boost build directory
-RUN rm -rf boost
-
 
 # === INSTALL C++ GUIDELINE SUPPORT LIBRARY ===
 
