@@ -5,8 +5,6 @@ LABEL Description="openSUSE Tumbleweed environment for Gaudi" Version="0.1"
 CMD bash
 
 
-# TODO: Port the rest to Spack
-
 # === SYSTEM SETUP ===
 
 # Install Gaudi build requirements using spack
@@ -33,6 +31,9 @@ RUN zypper in -y doxygen graphviz cppunit-devel gdb libxerces-c-devel          \
                  uuid-devel libunwind-devel gperftools gperftools-devel        \
                  jemalloc-devel ncurses5-devel which libuuid-devel gsl-devel   \
                  tbb-devel zlib-devel libpng-devel
+
+
+# TODO: Port the rest to Spack
 
 # === INSTALL BOOST ===
 
