@@ -216,6 +216,9 @@ RUN rm -rf RELAX
 RUN git clone --origin upstream https://gitlab.cern.ch/gaudi/Gaudi.git
 
 # Patch Gaudi for Boost 1.67 support
+#
+# FIXME: Should be submitted upstream eventually.
+#
 COPY boost-1_67.diff /root/
 RUN patch -p1 <boost-1_67.diff && rm boost-1_67.diff
 
@@ -226,6 +229,13 @@ RUN patch -p1 <boost-1_67.diff && rm boost-1_67.diff
 #
 COPY append_jemalloc.diff /root/
 RUN patch -p1 <append_jemalloc.diff && rm append_jemalloc.diff
+
+# Patch Gaudi to support versioned ROOT library names
+#
+# FIXME: Should be submitted upstream eventually.
+#
+COPY support_versioned_root.diff /root/
+RUN patch -p1 <support_versioned_root.diff && rm support_versioned_root.diff
 
 # Configure Gaudi
 RUN cd Gaudi && mkdir build && cd build                                        \
