@@ -10,8 +10,11 @@ CMD bash
 # === SYSTEM SETUP ===
 
 # Use python packages from spack
-RUN spack install python py-nose py-networkx                                   \
-    && echo "spack load python py-nose py-networkx" >> "$SETUP_ENV"
+RUN spack install python py-nose py-networkx py-setuptools                     \
+    && echo "spack load python" >> "$SETUP_ENV"                                \
+    && echo "spack load --dependencies py-nose" >> "$SETUP_ENV"                \
+    && echo "spack load --dependencies py-networkx" >> "$SETUP_ENV"            \
+    && echo "spack load --dependencies py-setuptools" >> "$SETUP_ENV"
 
 # Install non-ROOT requirements
 RUN zypper in -y cmake doxygen graphviz cppunit-devel gdb unzip                \
