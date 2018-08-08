@@ -37,6 +37,25 @@ RUN spack install boost@1.67.0+graph+python cmake intel-tbb ninja python       \
 # TODO: Make sure that all of these are needed, then move as much as possible to
 #       spack, and move remaining system dependencies to the spack Docker image.
 #
+#       Clear dependencies (that appear in Gaudi's CMake logs) are:
+#       - cppunit
+#       - Doxygen w/ dot plugin (requires graphviz)
+#       - Gnu Scientific Library
+#       - gperftools
+#       - jemalloc
+#       - libpng (...but why?)
+#       - OpenCL (not currently provided)
+#       - "UUID" (is that libuuid, uuid, or both?)
+#       - unwind
+#       - xerces-c
+#       - zlib
+#
+#       Dependencies whose status remains unclear are thus:
+#       - GDB
+#       - Whether all UUID-related packages are needed
+#       - NCurses
+#       - Which
+#
 RUN zypper in -y doxygen graphviz cppunit-devel gdb libxerces-c-devel          \
                  uuid-devel libunwind-devel gperftools gperftools-devel        \
                  jemalloc-devel ncurses5-devel which libuuid-devel gsl-devel   \
