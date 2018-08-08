@@ -9,7 +9,7 @@ CMD bash
 
 # === SYSTEM SETUP ===
 
-# Use python packages from spack
+# Install Gaudi build requirements using spack
 #
 # FIXME: Currently specifying the py-decorator dependency of py-networkx by hand
 #        as spack load --dependencies causes a libreadline-related warning. The
@@ -22,9 +22,10 @@ RUN spack install python py-nose py-networkx py-setuptools                     \
     && echo "spack load py-networkx" >> "$SETUP_ENV"                           \
     && echo "spack load py-setuptools" >> "$SETUP_ENV"
 
-# Install non-ROOT requirements from the system package manager
+# Install other build requirements from the system package manager
 #
-# FIXME: Move to Spack when feasible, otherwise add package to spack image
+# TODO: Make sure that all of these are needed, then move as much as possible to
+#       spack, and move remaining system dependencies to the spack Docker image.
 #
 RUN zypper in -y cmake doxygen graphviz cppunit-devel gdb libxerces-c-devel    \
                  uuid-devel libunwind-devel gperftools gperftools-devel        \
