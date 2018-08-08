@@ -28,8 +28,8 @@ RUN spack install python py-nose py-networkx py-setuptools                     \
 #
 RUN zypper in -y cmake doxygen graphviz cppunit-devel gdb libxerces-c-devel    \
                  uuid-devel libunwind-devel gperftools gperftools-devel        \
-                 jemalloc-devel ncurses5-devel ninja wget which libuuid-devel  \
-                 ninja gsl-devel tbb-devel zlib-devel libpng-devel
+                 jemalloc-devel ncurses5-devel ninja which libuuid-devel ninja \
+                 gsl-devel tbb-devel zlib-devel libpng-devel
 
 # === INSTALL BOOST ===
 
@@ -107,7 +107,7 @@ RUN rm -rf range-v3
 
 # Download, extract and delete the AIDA package
 RUN mkdir AIDA && cd AIDA                                                      \
-    && wget                                                                    \
+    && curl --output aida-3.2.1.zip                                            \
        ftp://ftp.slac.stanford.edu/software/freehep/AIDA/v3.2.1/aida-3.2.1.zip \
     && unzip -q aida-3.2.1.zip                                                 \
     && rm aida-3.2.1.zip
