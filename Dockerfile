@@ -13,11 +13,15 @@ CMD bash
 #        as spack load --dependencies causes a libreadline-related warning. The
 #        warning should be fixed instead.
 #
+# FIXME: There is a bug in the Boost spack package which leads us to specify the
+#        "graph" variant even if it should be on by default. The boost package
+#        should be fixed by removing the redeclaration of the "graph" variant.
+#
 # TODO: As soon as spack provides a less verbose and more performant environment
 #       setup mechanism, switch to it.
 #
-RUN spack install boost@1.67.0+python cmake intel-tbb ninja python py-nose     \
-                  py-networkx py-setuptools                                    \
+RUN spack install boost@1.67.0+graph+python cmake intel-tbb ninja python       \
+                  py-nose py-networkx py-setuptools                            \
     && echo "spack load boost" >> "$SETUP_ENV"                                 \
     && echo "spack load cmake" >> "$SETUP_ENV"                                 \
     && echo "spack load intel-tbb" >> "$SETUP_ENV"                             \
