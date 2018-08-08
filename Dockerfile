@@ -10,10 +10,16 @@ CMD bash
 # === SYSTEM SETUP ===
 
 # Use python packages from spack
+#
+# FIXME: Currently specifying the py-decorator dependency of py-networkx by hand
+#        as spack load --dependencies causes a libreadline-related warning. The
+#        warning should be fixed instead.
+#
 RUN spack install python py-nose py-networkx py-setuptools                     \
     && echo "spack load python" >> "$SETUP_ENV"                                \
+    && echo "spack load py-decorator" >> "$SETUP_ENV"                          \
     && echo "spack load py-nose" >> "$SETUP_ENV"                               \
-    && echo "spack load --dependencies py-networkx" >> "$SETUP_ENV"            \
+    && echo "spack load py-networkx" >> "$SETUP_ENV"                           \
     && echo "spack load py-setuptools" >> "$SETUP_ENV"
 
 # Install non-ROOT requirements
