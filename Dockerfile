@@ -17,11 +17,10 @@ RUN spack install python py-nose py-networkx py-setuptools                     \
     && echo "spack load --dependencies py-setuptools" >> "$SETUP_ENV"
 
 # Install non-ROOT requirements
-RUN zypper in -y cmake doxygen graphviz cppunit-devel gdb unzip                \
-                 libxerces-c-devel uuid-devel libunwind-devel gperftools       \
-                 gperftools-devel jemalloc-devel ncurses5-devel ninja wget     \
-                 which curl libuuid-devel ninja  gsl-devel tbb-devel           \
-                 zlib-devel libpng-devel
+RUN zypper in -y cmake doxygen graphviz cppunit-devel gdb libxerces-c-devel    \
+                 uuid-devel libunwind-devel gperftools gperftools-devel        \
+                 jemalloc-devel ncurses5-devel ninja wget which libuuid-devel  \
+                 ninja gsl-devel tbb-devel zlib-devel libpng-devel
 
 # === INSTALL BOOST ===
 
