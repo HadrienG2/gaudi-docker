@@ -13,8 +13,13 @@ CMD bash
 #        as spack load --dependencies causes a libreadline-related warning. The
 #        warning should be fixed instead.
 #
-RUN spack install cmake ninja python py-nose py-networkx py-setuptools         \
+# TODO: As soon as spack provides a less verbose and more performant environment
+#       setup mechanism, switch to it.
+#
+RUN spack install cmake intel-tbb ninja python py-nose py-networkx             \
+                  py-setuptools                                                \
     && echo "spack load cmake" >> "$SETUP_ENV"                                 \
+    && echo "spack load intel-tbb" >> "$SETUP_ENV"                             \
     && echo "spack load ninja" >> "$SETUP_ENV"                                 \
     && echo "spack load python" >> "$SETUP_ENV"                                \
     && echo "spack load py-decorator" >> "$SETUP_ENV"                          \
@@ -30,7 +35,7 @@ RUN spack install cmake ninja python py-nose py-networkx py-setuptools         \
 RUN zypper in -y doxygen graphviz cppunit-devel gdb libxerces-c-devel          \
                  uuid-devel libunwind-devel gperftools gperftools-devel        \
                  jemalloc-devel ncurses5-devel which libuuid-devel gsl-devel   \
-                 tbb-devel zlib-devel libpng-devel
+                 zlib-devel libpng-devel
 
 
 # TODO: Port the rest to Spack
