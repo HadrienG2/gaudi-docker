@@ -13,11 +13,6 @@ CMD bash
 #        "graph" variant even if it should be on by default. The boost package
 #        should be fixed by removing the redeclaration of the "graph" variant.
 #
-# FIXME: This list currently does not include ROOT, which is brought into scope
-#        via the "spack load" mechanism by the upstream Docker image, because it
-#        messes heavily with the environment. Once spack environments have
-#        matured, maybe we'll be able to handle ROOT using that mechanism too.
-#
 # TODO: Think about unmet optional dependencies on VTune and OpenCL (via pocl?)
 #
 ENV GAUDI_SPACK_CDEPS="boost@1.67.0+graph+python cmake cppunit                 \
@@ -29,9 +24,12 @@ ENV GAUDI_SPACK_PYDEPS="py-nose py-networkx py-setuptools"
 RUN spack install ${GAUDI_SPACK_CDEPS} ${GAUDI_SPACK_PYDEPS}
 
 # Bring Gaudi's build dependencies into the global scope
-RUN spack view -v add -d no -i /usr/local ${GAUDI_SPACK_CDEPS}                 \
-    && for name in ${GAUDI_SPACK_PYDEPS}; do                                   \
-           spack activate --view /usr/local ${name}                            \
+#
+# TODO: Try out Spack environments once they have matured, do not forget ROOT.
+#
+RUN for spec in ${GAUDI_SPACK_PYDEPS}; do spack activate ${spec}; done         \
+    && for spec in ${GAUDI_SPACK_CDEPS}; do                                    \
+           echo "spack load ${spec}" >> "${SETUP_ENV}";                        \
        done
 
 # Install other build requirements from the system package manager
