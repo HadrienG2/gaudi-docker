@@ -20,16 +20,19 @@ CMD bash
 #
 # TODO: Think about unmet optional dependencies on VTune and OpenCL (via pocl?)
 #
-ENV GAUDI_SPACK_DEPS="boost@1.67.0+graph+python cmake cppunit doxygen+graphviz \
-                      gperftools gsl intel-tbb jemalloc libpng libunwind       \
-                      libuuid ninja python py-nose py-networkx py-setuptools   \
-                      xerces-c zlib"
+ENV GAUDI_SPACK_CDEPS="boost@1.67.0+graph+python cmake cppunit                 \
+                       doxygen+graphviz gperftools gsl intel-tbb jemalloc      \
+                       libpng libunwind libuuid ninja python xerces-c zlib"
+ENV GAUDI_SPACK_PYDEPS="py-nose py-networkx py-setuptools"
 
 # Install Gaudi build requirements using spack
-RUN spack install ${GAUDI_SPACK_DEPS}
+RUN spack install ${GAUDI_SPACK_CDEPS} ${GAUDI_SPACK_PYDEPS}
 
 # Bring Gaudi's build dependencies into the global scope
-RUN spack view -v add -i /usr/local ${GAUDI_SPACK_DEPS}
+RUN spack view -v add -d no -i /usr/local ${GAUDI_SPACK_CDEPS}                 \
+    && for name in ${GAUDI_SPACK_PYDEPS}; do                                   \
+           spack activate --view /usr/local ${name}                            \
+       done
 
 # Install other build requirements from the system package manager
 #
