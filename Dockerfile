@@ -20,6 +20,8 @@ CMD bash
 # TODO: Investigate spack view as a potentially less verbose and more performant
 #       environment setup mechanism.
 #
+# TODO: Think about unmet optional dependencies on VTune and OpenCL (via pocl?)
+#
 RUN spack install boost@1.67.0+graph+python cmake cppunit doxygen+graphviz     \
                   gperftools gsl intel-tbb jemalloc libpng libunwind libuuid   \
                   ninja python py-nose py-networkx py-setuptools xerces-c zlib \
@@ -44,15 +46,9 @@ RUN spack install boost@1.67.0+graph+python cmake cppunit doxygen+graphviz     \
 
 # Install other build requirements from the system package manager
 #
-# TODO: Make sure that all of these are needed, then move as much as possible to
-#       spack, and move remaining system dependencies to the spack Docker image.
+# FIXME: "which" is only needed for my RELAX hack, can maybe find a better hack?
 #
-#       Use of "which" is needed for my dirty /genreflex RELAX build hack. An
-#       obvious alternative would be to fix RELAX's build system.
-#
-#       Whether GDB and NCurses are needed is currently unclear.
-#
-RUN zypper in -y gdb ncurses5-devel which
+RUN zypper in -y which
 
 
 # TODO: Port the rest to Spack
