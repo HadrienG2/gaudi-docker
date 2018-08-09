@@ -13,15 +13,18 @@ CMD bash
 #        "graph" variant even if it should be on by default. The boost package
 #        should be fixed by removing the redeclaration of the "graph" variant.
 #
-# TODO: Investigate spack view as a potentially less verbose and more performant
-#       environment setup mechanism.
-#
 # TODO: Think about unmet optional dependencies on VTune and OpenCL (via pocl?)
 #
 RUN spack install boost@1.67.0+graph+python cmake cppunit doxygen+graphviz     \
                   gperftools gsl intel-tbb jemalloc libpng libunwind libuuid   \
-                  ninja python py-nose py-networkx py-setuptools xerces-c zlib \
-    && spack activate py-nose                                                  \
+                  ninja python py-nose py-networkx py-setuptools xerces-c zlib
+
+# Bring Gaudi's build dependencies in scope
+#
+# TODO: Investigate spack view as a potentially less verbose and more performant
+#       environment setup mechanism.
+#
+RUN spack activate py-nose                                                     \
     && spack activate py-networkx                                              \
     && spack activate py-setuptools                                            \
     && echo "spack load boost" >> "$SETUP_ENV"                                 \
