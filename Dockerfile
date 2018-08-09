@@ -7,41 +7,29 @@ CMD bash
 
 # === SYSTEM SETUP ===
 
-# Install Gaudi build requirements using spack
+# List of Gaudi's build requirements, as a Spack spec
 #
 # FIXME: There is a bug in the Boost spack package which leads us to specify the
 #        "graph" variant even if it should be on by default. The boost package
 #        should be fixed by removing the redeclaration of the "graph" variant.
 #
+# FIXME: This list currently does not include ROOT, which is brought into scope
+#        via the "spack load" mechanism by the upstream Docker image, because it
+#        messes heavily with the environment. Once spack environments have
+#        matured, maybe we'll be able to handle ROOT using that mechanism too.
+#
 # TODO: Think about unmet optional dependencies on VTune and OpenCL (via pocl?)
 #
-RUN spack install boost@1.67.0+graph+python cmake cppunit doxygen+graphviz     \
-                  gperftools gsl intel-tbb jemalloc libpng libunwind libuuid   \
-                  ninja python py-nose py-networkx py-setuptools xerces-c zlib
+ENV GAUDI_SPACK_DEPS="boost@1.67.0+graph+python cmake cppunit doxygen+graphviz \
+                      gperftools gsl intel-tbb jemalloc libpng libunwind       \
+                      libuuid ninja python py-nose py-networkx py-setuptools   \
+                      xerces-c zlib"
 
-# Bring Gaudi's build dependencies in scope
-#
-# TODO: Investigate spack view as a potentially less verbose and more performant
-#       environment setup mechanism.
-#
-RUN spack activate py-nose                                                     \
-    && spack activate py-networkx                                              \
-    && spack activate py-setuptools                                            \
-    && echo "spack load boost" >> "$SETUP_ENV"                                 \
-    && echo "spack load cmake" >> "$SETUP_ENV"                                 \
-    && echo "spack load cppunit" >> "$SETUP_ENV"                               \
-    && echo "spack load doxygen+graphviz" >> "$SETUP_ENV"                      \
-    && echo "spack load gperftools" >> "$SETUP_ENV"                            \
-    && echo "spack load gsl" >> "$SETUP_ENV"                                   \
-    && echo "spack load intel-tbb" >> "$SETUP_ENV"                             \
-    && echo "spack load jemalloc" >> "$SETUP_ENV"                              \
-    && echo "spack load libpng" >> "$SETUP_ENV"                                \
-    && echo "spack load libunwind" >> "$SETUP_ENV"                             \
-    && echo "spack load libuuid" >> "$SETUP_ENV"                               \
-    && echo "spack load ninja" >> "$SETUP_ENV"                                 \
-    && echo "spack load python" >> "$SETUP_ENV"                                \
-    && echo "spack load xerces-c" >> "$SETUP_ENV"                              \
-    && echo "spack load zlib" >> "$SETUP_ENV"
+# Install Gaudi build requirements using spack
+RUN spack install ${GAUDI_SPACK_DEPS}
+
+# Bring Gaudi's build dependencies into the global scope
+RUN spack view -v add -i /usr/local ${GAUDI_SPACK_DEPS}
 
 # Install other build requirements from the system package manager
 #
