@@ -23,7 +23,9 @@ CMD bash
 RUN spack install boost@1.67.0+graph+python cmake cppunit doxygen+graphviz     \
                   gperftools gsl intel-tbb jemalloc libpng libunwind libuuid   \
                   ninja python py-nose py-networkx py-setuptools xerces-c zlib \
-    && spack activate py-nose py-networkx py-setuptools                        \
+    && spack activate py-nose                                                  \
+    && spack activate py-networkx                                              \
+    && spack activate py-setuptools                                            \
     && echo "spack load boost" >> "$SETUP_ENV"                                 \
     && echo "spack load cmake" >> "$SETUP_ENV"                                 \
     && echo "spack load cppunit" >> "$SETUP_ENV"                               \
