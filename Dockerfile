@@ -44,7 +44,7 @@ RUN spack install boost@1.67.0+graph+python cmake intel-tbb ninja python       \
 #       - gperftools
 #       - jemalloc
 #       - libpng (...but why?)
-#       - OpenCL (not currently provided)
+#       - OpenCL (optional and not currently provided, could use pocl?)
 #       - "UUID" (is that libuuid, uuid, or both?)
 #       - unwind
 #       - xerces-c
