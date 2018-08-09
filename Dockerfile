@@ -9,10 +9,6 @@ CMD bash
 
 # Install Gaudi build requirements using spack
 #
-# FIXME: Currently specifying the py-decorator dependency of py-networkx by hand
-#        as spack load --dependencies causes a libreadline-related warning. The
-#        warning should be fixed instead.
-#
 # FIXME: There is a bug in the Boost spack package which leads us to specify the
 #        "graph" variant even if it should be on by default. The boost package
 #        should be fixed by removing the redeclaration of the "graph" variant.
