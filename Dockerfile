@@ -252,4 +252,7 @@ RUN cd Gaudi/build && ninja clean
 # === FINAL CLEAN UP ===
 
 # Discard the system package cache to save up space
+#
+# FIXME: Can remove this once system dependency on "which" is taken care of
+#
 RUN zypper clean
