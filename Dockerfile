@@ -17,49 +17,40 @@ CMD bash
 #        "graph" variant even if it should be on by default. The boost package
 #        should be fixed by removing the redeclaration of the "graph" variant.
 #
-# TODO: As soon as spack provides a less verbose and more performant environment
-#       setup mechanism, switch to it.
+# TODO: Investigate spack view as a potentially less verbose and more performant
+#       environment setup mechanism.
 #
-RUN spack install boost@1.67.0+graph+python cmake intel-tbb ninja python       \
-                  py-nose py-networkx py-setuptools                            \
+RUN spack install boost@1.67.0+graph+python cmake cppunit doxygen+graphviz     \
+                  gperftools gsl intel-tbb jemalloc libpng libunwind libuuid   \
+                  ninja python py-nose py-networkx py-setuptools xerces-c zlib \
+    && spack activate py-nose py-networkx py-setuptools                        \
     && echo "spack load boost" >> "$SETUP_ENV"                                 \
     && echo "spack load cmake" >> "$SETUP_ENV"                                 \
+    && echo "spack load cppunit" >> "$SETUP_ENV"                               \
+    && echo "spack load doxygen+graphviz" >> "$SETUP_ENV"                      \
+    && echo "spack load gperftools" >> "$SETUP_ENV"                            \
+    && echo "spack load gsl" >> "$SETUP_ENV"                                   \
     && echo "spack load intel-tbb" >> "$SETUP_ENV"                             \
+    && echo "spack load jemalloc" >> "$SETUP_ENV"                              \
+    && echo "spack load libpng" >> "$SETUP_ENV"                                \
+    && echo "spack load libunwind" >> "$SETUP_ENV"                             \
+    && echo "spack load libuuid" >> "$SETUP_ENV"                               \
     && echo "spack load ninja" >> "$SETUP_ENV"                                 \
     && echo "spack load python" >> "$SETUP_ENV"                                \
-    && echo "spack load py-decorator" >> "$SETUP_ENV"                          \
-    && echo "spack load py-nose" >> "$SETUP_ENV"                               \
-    && echo "spack load py-networkx" >> "$SETUP_ENV"                           \
-    && echo "spack load py-setuptools" >> "$SETUP_ENV"
+    && echo "spack load xerces-c" >> "$SETUP_ENV"                              \
+    && echo "spack load zlib" >> "$SETUP_ENV"
 
 # Install other build requirements from the system package manager
 #
 # TODO: Make sure that all of these are needed, then move as much as possible to
 #       spack, and move remaining system dependencies to the spack Docker image.
 #
-#       Clear dependencies (that appear in Gaudi's CMake logs) are:
-#       - cppunit
-#       - Doxygen w/ dot plugin (requires graphviz)
-#       - Gnu Scientific Library
-#       - gperftools
-#       - jemalloc
-#       - libpng (...but why?)
-#       - OpenCL (optional and not currently provided, could use pocl?)
-#       - "UUID" (is that libuuid, uuid, or both?)
-#       - unwind
-#       - xerces-c
-#       - zlib
+#       Use of "which" is needed for my dirty /genreflex RELAX build hack. An
+#       obvious alternative would be to fix RELAX's build system.
 #
-#       Dependencies whose status remains unclear are thus:
-#       - GDB
-#       - Whether all UUID-related packages are needed
-#       - NCurses
-#       - Which
+#       Whether GDB and NCurses are needed is currently unclear.
 #
-RUN zypper in -y doxygen graphviz cppunit-devel gdb libxerces-c-devel          \
-                 uuid-devel libunwind-devel gperftools gperftools-devel        \
-                 jemalloc-devel ncurses5-devel which libuuid-devel gsl-devel   \
-                 zlib-devel libpng-devel
+RUN zypper in -y gdb ncurses5-devel which
 
 
 # TODO: Port the rest to Spack
