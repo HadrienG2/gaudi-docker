@@ -16,7 +16,7 @@ CMD bash
 # TODO: Think about unmet optional dependencies on VTune and OpenCL (via pocl?)
 #
 ENV GAUDI_SPACK_CDEPS="boost@1.67.0+graph+python cmake cppunit                 \
-                       doxygen+graphviz gperftools gsl intel-tbb jemalloc      \
+                       doxygen+graphviz gdb gperftools gsl intel-tbb jemalloc  \
                        libpng libunwind libuuid ninja python xerces-c zlib"
 ENV GAUDI_SPACK_PYDEPS="py-nose py-networkx py-setuptools"
 
