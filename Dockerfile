@@ -28,12 +28,6 @@ RUN for spec in ${GAUDI_SPACK_PYDEPS}; do spack activate ${spec}; done         \
            echo "spack load ${spec}" >> "${SETUP_ENV}";                        \
        done
 
-# Install other build requirements from the system package manager
-#
-# FIXME: "which" is only needed for my RELAX hack, can maybe find a better hack?
-#
-RUN zypper in -y which
-
 
 # TODO: Port the rest to Spack
 
@@ -175,7 +169,7 @@ RUN curl http://lcgpackages.web.cern.ch/lcgpackages/tarFiles/sources/RELAX-root6
 
 # Build and install RELAX (wow, such legacy, much hacks!)
 RUN cd RELAX && mkdir build && cd build                                        \
-    && ln -s `which genreflex` /genreflex                                      \
+    && ln -s `spack location --install-dir root`/bin/genreflex /genreflex      \
     && export CXXFLAGS="-I/usr/local/include/root/ -std=c++17"                 \
     && cmake .. -DCMAKE_BUILD_TYPE=RelWithDebInfo                              \
     && make -j8 && make install                                                \
@@ -232,12 +226,3 @@ RUN cd Gaudi/build                                                             \
 
 # Remove build byproducts to keep image light
 RUN cd Gaudi/build && ninja clean
-
-
-# === FINAL CLEAN UP ===
-
-# Discard the system package cache to save up space
-#
-# FIXME: Can remove this once system dependency on "which" is taken care of
-#
-RUN zypper clean
