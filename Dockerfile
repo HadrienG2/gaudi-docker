@@ -9,15 +9,11 @@ CMD bash
 
 # List of Gaudi's build requirements, as a Spack spec
 #
-# FIXME: There is a bug in the Boost spack package which leads us to specify the
-#        "graph" variant even if it should be on by default. The boost package
-#        should be fixed by removing the redeclaration of the "graph" variant.
-#
 # TODO: Think about unmet optional dependencies on VTune and OpenCL (via pocl?)
 #
-ENV GAUDI_SPACK_CDEPS="boost@1.67.0+graph+python cmake cppunit                 \
-                       doxygen+graphviz gdb gperftools gsl intel-tbb jemalloc  \
-                       libpng libunwind libuuid ninja python xerces-c zlib"
+ENV GAUDI_SPACK_CDEPS="boost@1.67.0+python cmake cppunit doxygen+graphviz gdb  \
+                       gperftools gsl intel-tbb jemalloc libpng libunwind      \
+                       libuuid ninja python xerces-c zlib"
 ENV GAUDI_SPACK_PYDEPS="py-nose py-networkx py-setuptools"
 
 # Install Gaudi build requirements using spack
