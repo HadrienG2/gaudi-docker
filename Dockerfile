@@ -7,16 +7,28 @@ CMD bash
 
 # === SYSTEM SETUP ===
 
+# Switch to a development branch of Spack where all required packages are in
+#
+# FIXME: Remove this once everything is integrated.
+#
+RUN cd /opt/spack && git fetch HadrienG2 && git checkout gaudi-deps
+
 # List of Gaudi's build requirements, as a Spack spec
+#
+# NOTE: We are using tabs to allow ourselves to separate the packages later on
+#       without disturbing Spack along the way.
 #
 # NOTE: We cannot test with Intel VTune in Docker because that is proprietary.
 #
-# FIXME: Add pocl-based OpenCL tests once the pocl spack package is fixed.
+# TODO: Try adding pocl later on to see if it can make the OpenCL example work.
 #
-ENV GAUDI_SPACK_CDEPS="boost@1.67.0+python cmake cppunit doxygen+graphviz gdb  \
-                       gperftools gsl heppdt@2 intel-tbb jemalloc libpng       \
-                       libunwind libuuid ninja python xerces-c zlib"
-ENV GAUDI_SPACK_PYDEPS="py-nose py-networkx py-setuptools"
+ENV GAUDI_SPACK_CDEPS="aida \t boost@1.67.0+python \t clhep \t cmake \t        \
+                       cppgsl cxxstd=17 \t cppunit \t doxygen+graphviz \t      \
+                       gdb \t gperftools \t gsl \t hepmc@3 \t heppdt@2 \t      \
+                       intel-tbb \t jemalloc \t libpng \t libunwind \t         \
+                       libuuid \t ninja \t python \t range-v3 cxxstd=17 \t     \
+                       xerces-c \t zlib"
+ENV GAUDI_SPACK_PYDEPS="py-nose \t py-networkx \t py-setuptools"
 
 # Install Gaudi build requirements using spack
 RUN spack install ${GAUDI_SPACK_CDEPS} ${GAUDI_SPACK_PYDEPS}
@@ -25,127 +37,14 @@ RUN spack install ${GAUDI_SPACK_CDEPS} ${GAUDI_SPACK_PYDEPS}
 #
 # TODO: Try out Spack environments once they have matured, do not forget ROOT.
 #
-RUN for spec in ${GAUDI_SPACK_PYDEPS}; do spack activate ${spec}; done         \
+RUN export IFS=$'\t'                                                           \
+    && for spec in ${GAUDI_SPACK_PYDEPS}; do spack activate ${spec}; done      \
     && for spec in ${GAUDI_SPACK_CDEPS}; do                                    \
            echo "spack load ${spec}" >> "${SETUP_ENV}";                        \
        done
 
 
 # TODO: Port the rest to Spack
-
-# === INSTALL C++ GUIDELINE SUPPORT LIBRARY ===
-
-# Download the GSL
-RUN git clone --depth=1 https://github.com/Microsoft/GSL.git
-
-# Build the GSL
-RUN cd GSL && mkdir build && cd build                                          \
-    && cmake -GNinja -DCMAKE_BUILD_TYPE=RelWithDebInfo                         \
-             -DGSL_CXX_STANDARD=17 ..                                          \
-    && ninja
-
-# Check that the GSL build is working properly
-RUN cd GSL/build && ctest -j8
-
-# Install the GSL
-RUN cd GSL/build && ninja install
-
-# Get rid of the GSL build directory
-RUN rm -rf GSL
-
-
-# === INSTALL RANGE-V3
-
-# Download the range-v3 library (v0.3.5)
-RUN git clone --branch=0.3.6 --depth=1                                         \
-              https://github.com/ericniebler/range-v3.git
-
-# Build range-v3
-RUN cd range-v3 && mkdir build && cd build                                     \
-    && cmake -GNinja -DRANGES_CXX_STD=17 .. && ninja
-
-# Check that the range-v3 build is working properly
-RUN cd range-v3/build && ctest -j8
-
-# Install range-v3
-RUN cd range-v3/build && ninja install
-
-# Get rid of the range-v3 build directory
-RUN rm -rf range-v3
-
-
-# === INSTALL AIDA ===
-
-# Download, extract and delete the AIDA package
-RUN mkdir AIDA && cd AIDA                                                      \
-    && curl --output aida-3.2.1.zip                                            \
-       ftp://ftp.slac.stanford.edu/software/freehep/AIDA/v3.2.1/aida-3.2.1.zip \
-    && unzip -q aida-3.2.1.zip                                                 \
-    && rm aida-3.2.1.zip
-
-# Install the AIDA headers
-RUN cp -r AIDA/src/cpp/AIDA /usr/include/
-
-# Get rid of the rest of the package, we do not need it
-RUN rm -rf AIDA
-
-
-# === INSTALL CLHEP ===
-
-# Download CLHEP
-RUN git clone --branch=CLHEP_2_4_1_0 --depth=1                                 \
-              https://gitlab.cern.ch/CLHEP/CLHEP.git
-
-# Build CLHEP
-RUN cd CLHEP && mkdir build && cd build                                        \
-    && cmake -GNinja .. && ninja
-
-# Test our CLHEP build
-RUN cd CLHEP/build && ctest -j8
-
-# Install CLHEP
-RUN cd CLHEP/build && ninja install
-
-# Get rid of the CLHEP build directory
-RUN rm -rf CLHEP
-
-
-# === INSTALL HEPMC v3 ===
-
-# Download HepMC v3
-RUN git clone --depth=1 https://gitlab.cern.ch/hepmc/HepMC3.git
-
-# Build and install HepMC
-RUN cd HepMC3 && mkdir build && cd build                                       \
-    && cmake -DCMAKE_BUILD_TYPE=RelWithDebInfo ..                              \
-    && make -j8 && make install
-
-# Get rid of the HepMC build directory
-RUN rm -rf HepMC3
-
-
-# === INSTALL HEPMC v2 ===
-
-# NOTE: Why are we overwriting our HepMC3 install with a HepMC2 one, you may
-#       wonder? The answer has to do with RELAX being hopelessly broken, and
-#       expecting the CMake files of HepMC3 together with the headers of HepMC2
-
-# Dowload HepMC v2
-RUN git clone --depth=1 https://gitlab.cern.ch/hepmc/HepMC.git
-
-# Build HepMC
-RUN cd HepMC && mkdir build && cd build                                        \
-    && cmake -Dmomentum=GEV -Dlength=MM .. && make -j8
-
-# Test our build of HepMC
-RUN cd HepMC/build && make test -j8
-
-# Install HepMC and remove bits of HepMC3 (ugh...)
-RUN cd HepMC/build && make install                                             \
-    && rm /usr/local/lib64/libHepMC.so /usr/local/lib64/libHepMC.a
-
-# Get rid of the HepMC build directory
-RUN rm -rf HepMC
 
 
 # === INSTALL RELAX ===
@@ -187,13 +86,6 @@ RUN patch -p1 <support_versioned_root.diff && rm support_versioned_root.diff
 # Configure Gaudi
 RUN cd Gaudi && mkdir build && cd build                                        \
     && cmake -DGAUDI_DIAGNOSTICS_COLOR=ON -GNinja ..
-
-# Configure the run-time linker
-#
-# NOTE: I am not sure why this is needed for this build specifically, but the
-#       Gaudi build will fail to find CLHEP if we don't do it.
-#
-RUN ldconfig
 
 # Build Gaudi
 RUN cd Gaudi/build && ninja
