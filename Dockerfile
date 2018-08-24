@@ -169,13 +169,12 @@ RUN rm -rf HepMC
 RUN curl http://lcgpackages.web.cern.ch/lcgpackages/tarFiles/sources/RELAX-root6.tar.gz \
       | tar -x
 
-# Build and install RELAX (wow, such legacy, much hacks!)
+# Build and install RELAX
 RUN cd RELAX && mkdir build && cd build                                        \
-    && ln -s `spack location --install-dir root`/bin/genreflex /genreflex      \
-    && export CXXFLAGS="-I/usr/local/include/root/ -std=c++17"                 \
-    && cmake .. -DCMAKE_BUILD_TYPE=RelWithDebInfo                              \
-    && make -j8 && make install                                                \
-    && rm /genreflex && unset CXXFLAGS
+    && cmake .. -DROOT_BINARY_PATH=`spack location -i root`/bin                \
+                -DCMAKE_CXX_FLAGS="-std=c++17"                                 \
+                -DCMAKE_BUILD_TYPE=RelWithDebInfo                              \
+    && make -j8 && make install
 
 # Get rid of the RELAX build directory
 RUN rm -rf RELAX
