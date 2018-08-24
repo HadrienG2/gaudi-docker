@@ -9,7 +9,9 @@ CMD bash
 
 # List of Gaudi's build requirements, as a Spack spec
 #
-# TODO: Think about unmet optional dependencies on VTune and OpenCL (via pocl?)
+# NOTE: We cannot test with Intel VTune in Docker because that is proprietary.
+#
+# FIXME: Add pocl-based OpenCL tests once the pocl spack package is fixed.
 #
 ENV GAUDI_SPACK_CDEPS="boost@1.67.0+python cmake cppunit doxygen+graphviz gdb  \
                        gperftools gsl intel-tbb jemalloc libpng libunwind      \
