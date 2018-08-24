@@ -22,13 +22,18 @@ RUN cd /opt/spack && git fetch HadrienG2 && git checkout gaudi-deps
 #
 # TODO: Try adding pocl later on to see if it can make the OpenCL example work.
 #
-ENV GAUDI_SPACK_CDEPS="aida \t boost@1.67.0+python \t clhep \t cmake \t        \
-                       cppgsl cxxstd=17 \t cppunit \t doxygen+graphviz \t      \
-                       gdb \t gperftools \t gsl \t hepmc@3 \t heppdt@2 \t      \
-                       intel-tbb \t jemalloc \t libpng \t libunwind \t         \
-                       libuuid \t ninja \t python \t range-v3 cxxstd=17 \t     \
-                       xerces-c \t zlib"
-ENV GAUDI_SPACK_PYDEPS="py-nose \t py-networkx \t py-setuptools"
+RUN export TAB=$'\t'                                                           \
+    && echo "export GAUDI_SPACK_CDEPS=\"                                       \
+                aida $TAB boost@1.67.0+python $TAB clhep $TAB cmake $TAB       \
+                cppgsl cxxstd=17 $TAB cppunit $TAB doxygen+graphviz $TAB       \
+                gdb $TAB gperftools $TAB gsl $TAB hepmc@3 $TAB heppdt@2 $TAB   \
+                intel-tbb $TAB jemalloc $TAB libpng $TAB libunwind $TAB        \
+                libuuid $TAB ninja $TAB python $TAB range-v3 cxxstd=17 $TAB    \
+                xerces-c $TAB zlib                                             \
+            \"" >> ${SETUP_ENV}                                                \
+    && echo "export GAUDI_SPACK_PYDEPS=\"                                      \
+                py-nose $TAB py-networkx $TAB py-setuptools                    \
+            \"" >> ${SETUP_ENV}
 
 # Install Gaudi build requirements using spack
 RUN spack install ${GAUDI_SPACK_CDEPS} ${GAUDI_SPACK_PYDEPS}
@@ -45,7 +50,6 @@ RUN export IFS=$'\t'                                                           \
 
 
 # TODO: Port the rest to Spack
-
 
 # === INSTALL RELAX ===
 
