@@ -14,8 +14,8 @@ CMD bash
 # FIXME: Add pocl-based OpenCL tests once the pocl spack package is fixed.
 #
 ENV GAUDI_SPACK_CDEPS="boost@1.67.0+python cmake cppunit doxygen+graphviz gdb  \
-                       gperftools gsl intel-tbb jemalloc libpng libunwind      \
-                       libuuid ninja python xerces-c zlib"
+                       gperftools gsl heppdt@2 intel-tbb jemalloc libpng       \
+                       libunwind libuuid ninja python xerces-c zlib"
 ENV GAUDI_SPACK_PYDEPS="py-nose py-networkx py-setuptools"
 
 # Install Gaudi build requirements using spack
@@ -108,21 +108,6 @@ RUN cd CLHEP/build && ninja install
 
 # Get rid of the CLHEP build directory
 RUN rm -rf CLHEP
-
-
-# === INSTALL HEPPDT v2 ===
-
-# Download and extract HepPDT v2
-RUN curl                                                                       \
-      http://lcgapp.cern.ch/project/simu/HepPDT/download/HepPDT-2.06.01.tar.gz \
-      | tar -xz
-
-# Build and install HepPDT
-RUN cd HepPDT-2.06.01 && mkdir build && cd build                               \
-    && ../configure && make -j8 && make install
-
-# Get rid of the HepPDT build directory
-RUN rm -rf HepPDT-2.06.01
 
 
 # === INSTALL HEPMC v3 ===
