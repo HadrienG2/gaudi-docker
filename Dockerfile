@@ -20,10 +20,10 @@ RUN export TAB=$'\t'                                                           \
     && echo "export GAUDI_SPACK_CDEPS=\"                                       \
                 aida $TAB boost@1.67.0+python $TAB clhep $TAB cmake $TAB       \
                 cppgsl cxxstd=17 $TAB cppunit $TAB doxygen+graphviz $TAB       \
-                gdb $TAB gperftools $TAB gsl $TAB hepmc@3 $TAB heppdt@2 $TAB   \
-                intel-tbb $TAB jemalloc $TAB libpng $TAB libunwind $TAB        \
-                libuuid $TAB ninja $TAB python $TAB range-v3 cxxstd=17 $TAB    \
-                xerces-c $TAB zlib                                             \
+                gdb $TAB gperftools $TAB gsl $TAB hepmc@2.06.09 $TAB           \
+                heppdt@2.06.01 $TAB intel-tbb $TAB jemalloc $TAB libpng $TAB   \
+                libunwind $TAB libuuid $TAB ninja $TAB python $TAB             \
+                range-v3 cxxstd=17 $TAB xerces-c $TAB zlib                     \
             \"" >> ${SETUP_ENV}                                                \
     && echo "export GAUDI_SPACK_PYDEPS=\"                                      \
                 py-nose $TAB py-networkx $TAB py-setuptools                    \
