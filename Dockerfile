@@ -7,12 +7,6 @@ CMD bash
 
 # === SYSTEM SETUP ===
 
-# Switch to a development branch of Spack where all required packages are in
-#
-# FIXME: Remove this once everything is integrated.
-#
-RUN cd /opt/spack && git fetch HadrienG2 && git checkout gaudi-deps
-
 # List of Gaudi's build requirements, as a Spack spec
 #
 # NOTE: We are using tabs to allow ourselves to separate the packages later on
