@@ -53,9 +53,12 @@ RUN curl http://lcgpackages.web.cern.ch/lcgpackages/tarFiles/sources/RELAX-root6
 
 # Build and install RELAX
 RUN cd RELAX && mkdir build && cd build                                        \
+    && HEPMC_PREFIX=`spack location -i hepmc`                                  \
     && cmake .. -DROOT_BINARY_PATH=`spack location -i root`/bin                \
                 -DCMAKE_CXX_FLAGS="-std=c++17"                                 \
                 -DCMAKE_BUILD_TYPE=RelWithDebInfo                              \
+                -DHEPMC_INCLUDE_DIR=${HEPMC_PREFIX}/include                    \
+                -DHEPMC_LIBRARIES=${HEPMC_PREFIX}/lib*/libHepMC.so             \
     && make -j8 && make install
 
 # Get rid of the RELAX build directory
