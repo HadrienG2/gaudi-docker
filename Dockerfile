@@ -7,6 +7,12 @@ CMD bash
 
 # === SYSTEM SETUP ===
 
+# Use my RELAX package development branch
+#
+# TODO: Remove this once it's integrated in Spack
+#
+RUN cd /opt/spack && git fetch HadrienG2 && git checkout relax-package
+
 # List of Gaudi's build requirements, as a Spack spec
 #
 # NOTE: We are using tabs to allow ourselves to separate the packages later on
@@ -23,7 +29,7 @@ RUN export TAB=$'\t'                                                           \
                 gdb $TAB gperftools $TAB gsl $TAB hepmc@2.06.09 $TAB           \
                 heppdt@2.06.01 $TAB intel-tbb $TAB jemalloc $TAB libpng $TAB   \
                 libunwind $TAB libuuid $TAB ninja $TAB python $TAB             \
-                range-v3 cxxstd=17 $TAB xerces-c $TAB zlib                     \
+                range-v3 cxxstd=17 $TAB relax $TAB xerces-c $TAB zlib          \
             \"" >> ${SETUP_ENV}                                                \
     && echo "export GAUDI_SPACK_PYDEPS=\"                                      \
                 py-nose $TAB py-networkx $TAB py-setuptools                    \
@@ -44,29 +50,6 @@ RUN export IFS=$'\t'                                                           \
 
 
 # TODO: Port the rest to Spack
-
-# === INSTALL RELAX ===
-
-# Downlad and extract RELAX (yes, this file is not actually gzipped)
-RUN curl http://lcgpackages.web.cern.ch/lcgpackages/tarFiles/sources/RELAX-root6.tar.gz \
-      | tar -x
-
-# Build and install RELAX
-RUN cd RELAX && mkdir build && cd build                                        \
-    && HEPMC_PREFIX=`spack location -i hepmc`                                  \
-    && cmake .. -DROOT_BINARY_PATH=`spack location -i root`/bin                \
-                -DCMAKE_CXX_FLAGS="-std=c++17"                                 \
-                -DCMAKE_BUILD_TYPE=RelWithDebInfo                              \
-                -DHEPMC_INCLUDE_DIR=${HEPMC_PREFIX}/include                    \
-                -DHEPMC_LIBRARIES=${HEPMC_PREFIX}/lib*/libHepMC.so             \
-    && make -j8 && make install                                                \
-    && ldconfig
-
-# Get rid of the RELAX build directory
-RUN rm -rf RELAX
-
-
-# === ATTEMPT A GAUDI TEST BUILD ===
 
 # Clone the Gaudi repository
 RUN git clone --origin upstream https://gitlab.cern.ch/gaudi/Gaudi.git
