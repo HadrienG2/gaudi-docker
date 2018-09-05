@@ -14,7 +14,7 @@ CMD bash
 #
 # NOTE: We cannot test with Intel VTune in Docker because that is proprietary.
 #
-# TODO: Try adding pocl later on to see if it can make the OpenCL example work.
+# TODO: Investigate if pocl can be used without making ROOT's interpreter angry.
 #
 RUN export TAB=$'\t'                                                           \
     && echo "export GAUDI_SPACK_CDEPS=\"                                       \
