@@ -59,7 +59,8 @@ RUN cd RELAX && mkdir build && cd build                                        \
                 -DCMAKE_BUILD_TYPE=RelWithDebInfo                              \
                 -DHEPMC_INCLUDE_DIR=${HEPMC_PREFIX}/include                    \
                 -DHEPMC_LIBRARIES=${HEPMC_PREFIX}/lib*/libHepMC.so             \
-    && make -j8 && make install
+    && make -j8 && make install                                                \
+    && ldconfig
 
 # Get rid of the RELAX build directory
 RUN rm -rf RELAX
