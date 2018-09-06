@@ -69,6 +69,13 @@ RUN patch -p1 <boost-1_67.diff && rm boost-1_67.diff
 COPY support_versioned_root.diff /root/
 RUN patch -p1 <support_versioned_root.diff && rm support_versioned_root.diff
 
+# Use my fork of xenv
+#
+# FIXME: Remove once the argparse situation is resolved
+#
+COPY use-xenv-fork.diff /root/
+RUN patch -p1 <use-xenv-fork.diff && rm use-xenv-fork.diff
+
 # Configure Gaudi
 RUN cd Gaudi && mkdir build && cd build                                        \
     && cmake -DGAUDI_DIAGNOSTICS_COLOR=ON -GNinja ..
