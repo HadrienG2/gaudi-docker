@@ -29,7 +29,8 @@ RUN export TAB=$'\t'                                                           \
                 gdb $TAB gperftools $TAB gsl $TAB hepmc@2.06.09 $TAB           \
                 heppdt@2.06.01 $TAB intel-tbb $TAB jemalloc $TAB libpng $TAB   \
                 libunwind $TAB libuuid $TAB ninja $TAB python $TAB             \
-                range-v3 cxxstd=17 $TAB relax $TAB xerces-c $TAB zlib          \
+                range-v3 cxxstd=17 $TAB relax ^ ${ROOT_SPACK_SPEC} $TAB        \
+                xerces-c $TAB zlib                                             \
             \"" >> ${SETUP_ENV}                                                \
     && echo "export GAUDI_SPACK_PYDEPS=\"                                      \
                 py-nose $TAB py-networkx $TAB py-setuptools                    \
