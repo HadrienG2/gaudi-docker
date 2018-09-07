@@ -24,9 +24,6 @@ RUN spack build ${GAUDI_SPACK_SPEC}
 #       but for some strange reason this flag cannot be passed to docker build.
 #       Therefore, we disable these tests during the docker image build.
 #
-# FIXME: The CMakeModules and StatusCodeFail tests fail due to harmful
-#        interactions with the spack build environment. Fix that.
-#
 RUN spack cd --build-dir ${GAUDI_SPACK_SPEC}                                   \
     && cd spack-build                                                          \
     && spack env gaudi+tests+optional                                          \
