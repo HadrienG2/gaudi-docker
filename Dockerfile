@@ -4,7 +4,7 @@ CMD bash
 
 # Use my Gaudi package development branch
 #
-# TODO: Remove this once it's integrated in Spack
+# FIXME: Move back to official Spack repo once everything is upstreamed.
 #
 RUN cd /opt/spack && git fetch HadrienG2 && git checkout gaudi-package
 
