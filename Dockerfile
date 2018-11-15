@@ -26,7 +26,7 @@ RUN spack build ${GAUDI_SPACK_SPEC}
 #
 RUN spack cd --build-dir ${GAUDI_SPACK_SPEC}                                   \
     && cd spack-build                                                          \
-    && spack env gaudi+tests+optional                                          \
+    && spack build-env gaudi+tests+optional                                    \
            ctest -j8 -E "(google_auditors\.heapchecker|event_timeout_abort)"
 
 # Drop the build to save space in the final Docker image
