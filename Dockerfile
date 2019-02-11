@@ -6,7 +6,10 @@ CMD bash
 #
 # FIXME: Move back to official Spack repo once everything is upstreamed.
 #
-RUN cd /opt/spack && git fetch HadrienG2 && git checkout gaudi-package
+RUN cd /opt/spack                                                              \
+    && git remote add HadrienG2 https://github.com/HadrienG2/spack.git         \
+    && git fetch HadrienG2                                                     \
+    && git checkout gaudi-package
 
 # Build a spack spec for Gaudi
 RUN echo "export GAUDI_SPACK_SPEC=\"gaudi@develop +tests +optional             \
